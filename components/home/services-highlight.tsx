@@ -19,7 +19,7 @@ export function ServicesHighlight() {
 	})
 
 	const backgroundColor = useTransform(scrollYProgress, [0, 1], ['#f8f5ed', '#cbede0'])
-	const cardY = useTransform(scrollYProgress, [0, 1], [-200, 320])
+	const cardY = useTransform(scrollYProgress, [0, 1], [-400, 220])
 	const activeService = services.find((service) => service.id === activeServiceId) ?? services[0]
 	if (loading) return <section id="services" className="min-h-screen animate-pulse bg-[#f8f5ed]"><div ref={sectionRef} className="min-h-screen" /></section>
 	if (!activeService) return <section id="services" className="bg-[#f8f5ed]"><div ref={sectionRef} /></section>
