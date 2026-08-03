@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useTransform } from 'motion/react'
 import Image from 'next/image'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import ArrowIcon from '../icons/ArrowIcon'
 import { usePublicContent } from '@/lib/use-public-content'
 
@@ -11,7 +11,7 @@ type Service = { id: string; title: string; description: string; image: string; 
 export function ServicesHighlight() {
 	const { items: rawServices, loading } = usePublicContent<Omit<Service, "description"> & { excerpt: string }>("services")
 	const services = rawServices.map(service => ({ ...service, description: service.excerpt }))
-	const sectionRef = useRef<HTMLDivElement | null>(null)
+	const sectionRef = useRef<HTMLElement | null>(null)
 	const [activeServiceId, setActiveServiceId] = useState<string | null>(null)
 	const { scrollYProgress } = useScroll({
 		target: sectionRef,
@@ -21,16 +21,20 @@ export function ServicesHighlight() {
 	const backgroundColor = useTransform(scrollYProgress, [0, 1], ['#f8f5ed', '#cbede0'])
 	const cardY = useTransform(scrollYProgress, [0, 1], [-400, 220])
 	const activeService = services.find((service) => service.id === activeServiceId) ?? services[0]
-	if (loading) return <section id="services" className="min-h-screen animate-pulse bg-[#f8f5ed]"><div ref={sectionRef} className="min-h-screen" /></section>
-	if (!activeService) return <section id="services" className="bg-[#f8f5ed]"><div ref={sectionRef} /></section>
+	useEffect(() => {
+		if (!services.length) return
+		const frame = requestAnimationFrame(() => window.dispatchEvent(new Event('resize')))
+		return () => cancelAnimationFrame(frame)
+	}, [services.length])
 
 	return (
 		<motion.section
+			ref={sectionRef}
 			id="services"
 			style={{ backgroundColor }}
-			className="font-nian min-h-screen px-4 py-10 text-[#35554f] sm:px-6 lg:px-28 lg:pt-24 lg:pb-6 "
+			className={`font-nian min-h-screen px-4 py-10 text-[#35554f] sm:px-6 lg:px-28 lg:pt-24 lg:pb-6 ${loading ? 'animate-pulse' : ''}`}
 		>
-			<div ref={sectionRef}>
+			{!activeService ? <div className="min-h-screen" /> : <div>
 				<div className="flex min-h-[calc(100vh-5rem)] w-full flex-col  pt-16 lg:pt-0">
 					<div className="pt-12 lg:pt-20">
 						<h2 className="font-nian text-[3.4rem] leading-[0.93] tracking-[-0.05em] text-[#2f4d47] sm:text-[4.8rem] md:text-[6rem] lg:text-[7.6rem] xl:text-[8.7rem]">
@@ -124,7 +128,7 @@ export function ServicesHighlight() {
 						</motion.div>
 					</div>
 				</div>
-			</div>
+			</div>}
 		</motion.section>
 	)
 }

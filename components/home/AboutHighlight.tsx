@@ -14,7 +14,7 @@ export default function AboutHighlight() {
 			// style={{ maxWidth: '1380px' }}
 			>
 				<div className=" flex flex-col w-full  pt-24 lg:items-start lg:pt-36 lg:gap-20">
-					<div className="w-full flex h-fit ">
+					<div className="w-full flex h-fit mb-4 ">
 						<h2 className="font-nian font-bold text-[2rem] leading-[0.94] tracking-[-0.04em] text-[#2e4c47] sm:text-[3rem] md:text-[4.5rem] lg:text-[6rem] xl:text-[6.8rem]">
 							{about?.highlightTitle || "هدف من این است که بر سلامت روان و کیفیت زندگی شما اثر ماندگار و واقعی بگذارم."}
 						</h2>
