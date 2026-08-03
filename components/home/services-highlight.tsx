@@ -107,7 +107,7 @@ export function ServicesHighlight() {
 					<div className="order-1 lg:order-2 flex w-full h-full  ">
 						<motion.div
 							style={{ y: cardY }}
-							className="relative bottom-20 md:bottom-auto mx-auto w-full max-w-[18rem] md:h-120 rounded-t-none rounded-b-full bg-[#2e4b46] p-4 text-white shadow-[0_16px_40px_rgba(25,49,45,0.15)] sm:max-w-[20rem]"
+							className="relative bottom-32 md:bottom-auto mx-auto w-full max-w-[18rem] md:h-120 rounded-t-none rounded-b-full bg-[#2e4b46] p-4 text-white shadow-[0_16px_40px_rgba(25,49,45,0.15)] sm:max-w-[20rem]"
 						>
 							<p className="mb-4 text-base leading-8 text-white/92">
 								{activeService.description}
