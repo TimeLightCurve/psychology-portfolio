@@ -24,9 +24,23 @@ function RepeaterField({ name, label, value }: { name: string; label: string; va
 
 function ImageField({ name, label, value }: { name: string; label: string; value: unknown }) {
   const [src, setSrc] = useState(String(value ?? ""))
+  const [isLibraryOpen, setIsLibraryOpen] = useState(false)
+  const [images, setImages] = useState<string[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [isUploading, setIsUploading] = useState(false)
   const [error, setError] = useState("")
 
-  function selectImage(event: React.ChangeEvent<HTMLInputElement>) {
+  async function openLibrary() {
+    setIsLibraryOpen(true)
+    setError("")
+    setIsLoading(true)
+    const response = await fetch("/api/admin/media")
+    if (response.ok) setImages(await response.json())
+    else setError("بارگذاری کتابخانه تصاویر انجام نشد.")
+    setIsLoading(false)
+  }
+
+  async function selectImage(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0]
     if (!file) return
     if (!file.type.startsWith("image/")) {
@@ -34,18 +48,32 @@ function ImageField({ name, label, value }: { name: string; label: string; value
       event.target.value = ""
       return
     }
-    const reader = new FileReader()
-    reader.onload = () => {
-      setSrc(typeof reader.result === "string" ? reader.result : "")
-      setError("")
+    setIsUploading(true)
+    setError("")
+    const data = new FormData()
+    data.set("file", file)
+    const response = await fetch("/api/admin/media", { method: "POST", body: data })
+    const result = await response.json()
+    if (response.ok) {
+      setImages(current => [result.url, ...current])
+      setSrc(result.url)
+    } else {
+      setError(result.error ?? "بارگذاری تصویر انجام نشد.")
     }
-    reader.readAsDataURL(file)
+    event.target.value = ""
+    setIsUploading(false)
   }
 
   return <fieldset className="md:col-span-2"><legend className="text-sm">{label}</legend><input type="hidden" name={name} value={src} />
     {src ? <div className="mt-2 overflow-hidden rounded-2xl border border-[#dce5e1] bg-[#f5f8f6] p-2"><img src={src} alt="پیش‌نمایش تصویر" className="h-56 w-full rounded-xl object-cover" onError={() => setError("نمایش این تصویر ممکن نیست.")} /></div> : <div className="mt-2 flex h-40 items-center justify-center rounded-2xl border border-dashed border-[#cedbd5] bg-[#f5f8f6] text-sm text-[#71857e]">تصویری انتخاب نشده است.</div>}
-    <div className="mt-3 flex flex-wrap gap-3"><label className="cursor-pointer rounded-xl bg-[#35564d] px-4 py-2.5 text-sm text-white"><span>{src ? "تغییر تصویر" : "افزودن تصویر"}</span><input type="file" accept="image/*" className="sr-only" onChange={selectImage} /></label>{src && <button type="button" onClick={() => { setSrc(""); setError("") }} className="rounded-xl border border-red-200 px-4 py-2.5 text-sm text-red-700">حذف تصویر</button>}</div>
+    <div className="mt-3 flex flex-wrap gap-3"><button type="button" onClick={openLibrary} className="rounded-xl bg-[#35564d] px-4 py-2.5 text-sm text-white">{src ? "تغییر تصویر" : "افزودن تصویر"}</button>{src && <button type="button" onClick={() => { setSrc(""); setError("") }} className="rounded-xl border border-red-200 px-4 py-2.5 text-sm text-red-700">حذف تصویر</button>}</div>
     {error && <p className="mt-2 text-sm text-red-700">{error}</p>}
+    {isLibraryOpen && <div role="dialog" aria-modal="true" aria-label="کتابخانه تصاویر" className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4" onClick={() => setIsLibraryOpen(false)}><div className="max-h-[90vh] w-full max-w-5xl overflow-y-auto rounded-3xl bg-white p-5 shadow-xl sm:p-7" onClick={event => event.stopPropagation()}>
+      <div className="flex items-center justify-between gap-4"><h2 className="text-xl font-semibold">کتابخانه تصاویر</h2><button type="button" onClick={() => setIsLibraryOpen(false)} className="rounded-lg border px-3 py-2 text-sm">بستن</button></div>
+      <div className="mt-5 flex items-center justify-between gap-4 border-y border-[#e3ebe7] py-4"><p className="text-sm text-[#71857e]">یک تصویر را برای انتخاب کلیک کنید.</p><label className="cursor-pointer rounded-xl bg-[#35564d] px-4 py-2.5 text-sm text-white"><span>{isUploading ? "در حال بارگذاری..." : "بارگذاری تصویر جدید"}</span><input type="file" accept="image/*" className="sr-only" disabled={isUploading} onChange={selectImage} /></label></div>
+      {isLoading ? <p className="py-12 text-center text-[#71857e]">در حال بارگذاری...</p> : <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">{images.map(image => <button key={image} type="button" onClick={() => { setSrc(image); setError(""); setIsLibraryOpen(false) }} className={`overflow-hidden rounded-xl border-2 p-1 ${src === image ? "border-[#35564d]" : "border-transparent hover:border-[#a9b7b0]"}`}><img src={image} alt="" className="aspect-square w-full rounded-lg object-cover" /></button>)}</div>}
+      {!isLoading && images.length === 0 && <p className="py-12 text-center text-[#71857e]">تصویری در کتابخانه موجود نیست.</p>}
+    </div></div>}
   </fieldset>
 }
 
