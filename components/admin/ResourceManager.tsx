@@ -24,9 +24,29 @@ function RepeaterField({ name, label, value }: { name: string; label: string; va
 
 function ImageField({ name, label, value }: { name: string; label: string; value: unknown }) {
   const [src, setSrc] = useState(String(value ?? ""))
-  return <label className="md:col-span-2"><span className="text-sm">{label}</span><input name={name} value={src} onChange={event => setSrc(event.target.value)} dir="ltr" className="mt-2 w-full rounded-xl border border-[#cedbd5] bg-[#fbfcfb] px-4 py-3 outline-none focus:border-[#35564d]" />
-    {src && <span className="mt-3 block overflow-hidden rounded-2xl border border-[#dce5e1] bg-[#f5f8f6] p-2"><img src={src} alt="پیش‌نمایش تصویر" className="h-56 w-full rounded-xl object-cover" onError={event => { event.currentTarget.style.display = "none" }} /></span>}
-  </label>
+  const [error, setError] = useState("")
+
+  function selectImage(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0]
+    if (!file) return
+    if (!file.type.startsWith("image/")) {
+      setError("فقط فایل‌های تصویری قابل انتخاب هستند.")
+      event.target.value = ""
+      return
+    }
+    const reader = new FileReader()
+    reader.onload = () => {
+      setSrc(typeof reader.result === "string" ? reader.result : "")
+      setError("")
+    }
+    reader.readAsDataURL(file)
+  }
+
+  return <fieldset className="md:col-span-2"><legend className="text-sm">{label}</legend><input type="hidden" name={name} value={src} />
+    {src ? <div className="mt-2 overflow-hidden rounded-2xl border border-[#dce5e1] bg-[#f5f8f6] p-2"><img src={src} alt="پیش‌نمایش تصویر" className="h-56 w-full rounded-xl object-cover" onError={() => setError("نمایش این تصویر ممکن نیست.")} /></div> : <div className="mt-2 flex h-40 items-center justify-center rounded-2xl border border-dashed border-[#cedbd5] bg-[#f5f8f6] text-sm text-[#71857e]">تصویری انتخاب نشده است.</div>}
+    <div className="mt-3 flex flex-wrap gap-3"><label className="cursor-pointer rounded-xl bg-[#35564d] px-4 py-2.5 text-sm text-white"><span>{src ? "تغییر تصویر" : "افزودن تصویر"}</span><input type="file" accept="image/*" className="sr-only" onChange={selectImage} /></label>{src && <button type="button" onClick={() => { setSrc(""); setError("") }} className="rounded-xl border border-red-200 px-4 py-2.5 text-sm text-red-700">حذف تصویر</button>}</div>
+    {error && <p className="mt-2 text-sm text-red-700">{error}</p>}
+  </fieldset>
 }
 
 export default function ResourceManager({ resource, definition }: { resource: string; definition: Definition }) {

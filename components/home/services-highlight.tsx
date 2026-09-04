@@ -50,7 +50,7 @@ export function ServicesHighlight() {
 							هیجانی تا همراهی در مسیر خودشناسی، تنظیم روابط و بازسازی تعادل ذهنی. در این بخش
 							می توانید با رویکرد کاری و حوزه های خدمات من بیشتر آشنا شوید.
 						</p>
-
+						
 						{/* <a
 						href="#contact"
 						className="mt-10 inline-flex w-fit flex-row-reverse items-center gap-3 rounded-full bg-[#f9f7f0] px-6 py-3 text-lg font-medium text-[#35564d] transition hover:bg-white"

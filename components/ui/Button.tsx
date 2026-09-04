@@ -19,7 +19,7 @@ export default function Button({ onClick, href, children, className, mainClassNa
 	const sharedProps = {
 		onPointerEnter: () => setIsHovered(true),
 		onPointerLeave: () => setIsHovered(false),
-		className: cn(`relative mt-8 inline-flex items-center gap-3 overflow-hidden rounded-full px-5 py-3 text-base font-medium transition-colors duration-100 delay-250 ${isHovered ? "bg-[#2e4c47]" : "bg-[#d8efe4]"}`, mainClassName),
+		className: cn(`relative mt-8 inline-flex items-center gap-3 overflow-hidden rounded-full pr-3 pl-6 py-3 text-base font-medium transition-colors duration-100 delay-250 ${isHovered ? "bg-[#2e4c47]" : "bg-[#d8efe4]"}`, mainClassName),
 	}
 
 	const content = (
