@@ -1,3 +1,11 @@
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "/",
+  },
+}
+
 
 import AboutHighlight from "@/components/home/AboutHighlight"
 import ClinicLocations from "@/components/home/ClinicLocations"
@@ -10,11 +18,11 @@ export default function Home() {
     <div className="relative min-h-screen bg-[#f4f1ea] text-[#18312b]">
       <main className="  flex flex-col w-screen min-h-screen">
         <Hero />
-        
+
         <AboutHighlight />
         <ClinicLocations />
         <ServicesHighlight />
-        
+
       </main>
       {/* <div className=" absolute flex w-screen h-screen z-50 top-0 inset-0">
         <ThreeCanvas />

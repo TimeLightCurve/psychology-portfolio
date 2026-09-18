@@ -66,9 +66,6 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.shaghayeghzarei.ir"),
   title: " شقایق زارعی روانشناس",
   description: "وب سایت شخصی و پرتفوی حرفه ای شقایق زارعی روانشناس برای معرفی خدمات، تجربه و راه های ارتباطی.",
-  alternates: {
-    canonical: "/",
-  },
 }
 
 export default async function RootLayout({

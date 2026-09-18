@@ -1,7 +1,7 @@
-import type { MetadataRoute } from 'next'
 import { getItems } from '@/lib/content'
 import type { BlogDocument } from '@/lib/models/blog'
 import type { ServiceDocument } from '@/lib/models/service'
+import type { MetadataRoute } from 'next'
 
 const siteUrl = 'https://www.shaghayeghzarei.ir'
 
