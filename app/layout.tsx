@@ -63,8 +63,8 @@ const nian = localFont({
 
 
 export const metadata: Metadata = {
-  title: "پرتفوی دکتر روانشناس",
-  description: "وب سایت شخصی و پرتفوی حرفه ای دکتر روانشناس برای معرفی خدمات، تجربه و راه های ارتباطی.",
+  title: " شقایق زارعی روانشناس",
+  description: "وب سایت شخصی و پرتفوی حرفه ای شقایق زارعی روانشناس برای معرفی خدمات، تجربه و راه های ارتباطی.",
 }
 
 export default async function RootLayout({

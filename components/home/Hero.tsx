@@ -37,7 +37,7 @@ export default function Hero() {
 						</h1>
 					</div>
 
-					<div className=" flex ">
+					<div className=" flex pt-20">
 						<div
 							className="mx-auto flex w-full items-end justify-between gap-6 pt-18 text-white/92"
 						// style={{ maxWidth: "1380px" }}
