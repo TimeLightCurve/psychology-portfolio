@@ -1,9 +1,9 @@
+import LenisWrapper from "@/components/lenis/LenisWrapper"
 import SiteChrome from "@/components/SiteChrome"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono, Poppins } from "next/font/google"
 import localFont from 'next/font/local'
 import "./globals.css"
-import LenisWrapper from "@/components/lenis/LenisWrapper"
 
 
 const geistSans = Geist({
@@ -63,8 +63,12 @@ const nian = localFont({
 
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.shaghayeghzarei.ir"),
   title: " شقایق زارعی روانشناس",
   description: "وب سایت شخصی و پرتفوی حرفه ای شقایق زارعی روانشناس برای معرفی خدمات، تجربه و راه های ارتباطی.",
+  alternates: {
+    canonical: "/",
+  },
 }
 
 export default async function RootLayout({
@@ -82,7 +86,7 @@ export default async function RootLayout({
       >
         <LenisWrapper >
           <SiteChrome>{children}</SiteChrome>
-        </LenisWrapper>  
+        </LenisWrapper>
       </body>
     </html>
   )
